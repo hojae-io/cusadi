@@ -25,7 +25,7 @@ class CusadiFunction:
     _fn_output = []
 
     # ! Public methods:
-    def __init__(self, fn_casadi, num_instances):
+    def __init__(self, fn_casadi, num_instances, precision='double'):
         assert torch.cuda.is_available()
         lib_filepath = os.path.join(CUSADI_BUILD_DIR, f"lib{fn_casadi.name()}.so")
         self.fn_casadi = fn_casadi
@@ -35,6 +35,8 @@ class CusadiFunction:
         self._fn_library.evaluate.restype = ctypes.c_float
         print("Loaded CasADi function: ", self.fn_casadi)
         print("Loaded library: ", self._fn_library)
+        self.precision = precision
+        self.torch_precision = torch.double if precision=='double' else torch.float
         self._setup()
 
     def evaluate(self, inputs):
@@ -69,18 +71,18 @@ class CusadiFunction:
     # ! Private methods:
     def _setup(self):
         self._input_tensors = [torch.zeros((self.num_instances, self.fn_casadi.nnz_in(i)),
-                                            device=self._device, dtype=torch.double).contiguous()
+                                            device=self._device, dtype=self.torch_precision).contiguous()
                                for i in range(self.fn_casadi.n_in())]
         self._output_tensors = [torch.zeros(self.num_instances, self.fn_casadi.nnz_out(i),
-                                            device=self._device, dtype=torch.double).contiguous()
+                                            device=self._device, dtype=self.torch_precision).contiguous()
                                 for i in range(self.fn_casadi.n_out())]
         self._output_tensors_dense = [torch.zeros((self.num_instances,
                                                    self.fn_casadi.size1_out(i),
                                                    self.fn_casadi.size2_out(i)),
-                                      device=self._device, dtype=torch.double).contiguous()
+                                      device=self._device, dtype=self.torch_precision).contiguous()
                                       for i in range(self.fn_casadi.n_out())]
         self._work_tensor = torch.zeros((self.num_instances, self.fn_casadi.sz_w()),
-                                        device=self._device, dtype=torch.double).contiguous()
+                                        device=self._device, dtype=self.torch_precision).contiguous()
         self._input_ptrs = torch.zeros(self.fn_casadi.n_in(), device='cuda', dtype=torch.int64).contiguous()
         self._output_ptrs = torch.zeros(self.fn_casadi.n_out(), device='cuda', dtype=torch.int64).contiguous()
         for i in range(self.fn_casadi.n_in()):
@@ -89,7 +91,7 @@ class CusadiFunction:
             self._output_ptrs[i] = self._output_tensors[i].data_ptr()
         self._fn_input = self._castAsCPointer(self._input_ptrs.data_ptr(), 'int')
         self._fn_output = self._castAsCPointer(self._output_ptrs.data_ptr(), 'int')
-        self._fn_work = self._castAsCPointer(self._work_tensor.data_ptr(), 'double')
+        self._fn_work = self._castAsCPointer(self._work_tensor.data_ptr(), self.precision)
         self.inputs_sparse = self._input_tensors
         self.outputs_sparse = self._output_tensors
         self.outputs_dense = self._output_tensors_dense

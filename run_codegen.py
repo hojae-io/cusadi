@@ -60,7 +60,7 @@ def setupParser():
     parser = argparse.ArgumentParser(description='Script to generate parallelized code from CasADi functions')
     parser.add_argument('--fn', type=str, dest='fn_name', default='all',
                         help='Function to parallelize in cusadi/casadi_functions, defaults to "all"')
-    parser.add_argument('--precision', type=bool, dest='precision', default=True,
+    parser.add_argument('--precision', type=bool, dest='precision', default=False,
                         help='Precision of generated fn. True: double, False: float. Defaults to double')
     parser.add_argument('--gen_CUDA', type=bool, dest='gen_CUDA', default=True,
                         help='Generate CUDA codegen. Defaults to True')
