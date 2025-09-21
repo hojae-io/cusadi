@@ -1,0 +1,1 @@
+/usr/lib/nvidia-cuda-toolkit/bin/g++ -fPIC -shared -Wl,-soname,libC_arm_hand_simple.so -o libC_arm_hand_simple.so @CMakeFiles/C_arm_hand_simple.dir/objects1.rsp @CMakeFiles/C_arm_hand_simple.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"

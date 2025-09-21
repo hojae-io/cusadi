@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/hjlee/git/IsaacLab.brl/cusadi/codegen/CM_humanoid_full_sf_400g.cu
+cuda_runtime.h
+-
+math.h
+-
+iostream
+-
+

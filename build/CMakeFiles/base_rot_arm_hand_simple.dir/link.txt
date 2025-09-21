@@ -1,0 +1,1 @@
+/usr/lib/nvidia-cuda-toolkit/bin/g++ -fPIC -shared -Wl,-soname,libbase_rot_arm_hand_simple.so -o libbase_rot_arm_hand_simple.so @CMakeFiles/base_rot_arm_hand_simple.dir/objects1.rsp @CMakeFiles/base_rot_arm_hand_simple.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"

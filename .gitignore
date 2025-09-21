@@ -2,7 +2,7 @@
 .vscode/
 
 # C/C++ files
-*.so
+# *.so
 
 # Virtual environments
 *venv
@@ -13,11 +13,11 @@ __pycache__/
 *$py.class
 
 # C extensions
-*.so
+# *.so
 
 # Distribution / packaging
 .Python
-build/
+# build/
 develop-eggs/
 dist/
 downloads/
