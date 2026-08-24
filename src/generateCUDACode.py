@@ -21,7 +21,10 @@ def generateCMakeLists(casadi_fns):
     message("CUDA found")
     endif()
     if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-        set(CMAKE_CUDA_ARCHITECTURES 75 86)
+        # 86 only: the whole kernel is recompiled once per architecture, and these unrolled
+        # solvers are large enough that a second arch nearly doubles build time. Add 75 back
+        # (or pass -DCMAKE_CUDA_ARCHITECTURES) if a Turing card needs to run these.
+        set(CMAKE_CUDA_ARCHITECTURES 86)
     endif()
     message(${CMAKE_CUDA_ARCHITECTURES})
 
