@@ -11,10 +11,9 @@ include_directories(${CUDA_INCLUDE_DIRS})
 message("CUDA found")
 endif()
 if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-    # 86 only: the whole kernel is recompiled once per architecture, and these unrolled
-    # solvers are large enough that a second arch nearly doubles build time. Add 75 back
-    # (or pass -DCMAKE_CUDA_ARCHITECTURES) if a Turing card needs to run these.
-    set(CMAKE_CUDA_ARCHITECTURES 86)
+    # 86 = Ampere (RTX 30xx), 90 = Hopper (H100/H200). Each arch is a full recompile of the
+    # kernel, so keep this list to the GPUs actually in use.
+    set(CMAKE_CUDA_ARCHITECTURES 86 90)
 endif()
 message(${CMAKE_CUDA_ARCHITECTURES})
 
