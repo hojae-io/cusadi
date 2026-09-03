@@ -21,9 +21,10 @@ def generateCMakeLists(casadi_fns):
     message("CUDA found")
     endif()
     if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-        # 86 = Ampere (RTX 30xx), 90 = Hopper (H100/H200 on the cluster). Each arch is a full
-        # recompile of the kernel, so keep this list to the GPUs actually in use.
-        set(CMAKE_CUDA_ARCHITECTURES 86 90)
+        # 80 = A100 (brl-aloha), 86 = RTX 30xx (185), 89 = RTX 4090 (brl-temp), 90 = Hopper
+        # (cluster). A cubin runs only on the same major at equal-or-higher minor, so every
+        # target needs its own entry; the fat binary then loads unchanged on all of them.
+        set(CMAKE_CUDA_ARCHITECTURES 80 86 89 90)
     endif()
     message(${CMAKE_CUDA_ARCHITECTURES})
 
@@ -31,7 +32,7 @@ def generateCMakeLists(casadi_fns):
     set(CMAKE_CXX_STANDARD 11)
 
     # Set CUDA flags
-    set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 -arch=sm_86 --use_fast_math)  # Adjust architecture as needed
+    set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -O3 --use_fast_math)
 
     """)
 
